@@ -1,2 +1,2 @@
 # SCoordination
-A thinner and somewhat rethought coordination packaged heavily inspired by XCoodrinator
+A thinner and somewhat rethought coordination package heavily inspired by XCoodrinator
