@@ -23,11 +23,13 @@ open class TabsCoordinator: BaseCoordinator, ViewControlling {
     
     // MARK: Init
     
+    @MainActor
     public override init(sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
         self.rootViewController = UITabBarController()
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
     }
     
+    @MainActor
     public init(rootViewController: UITabBarController, sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
         self.rootViewController = rootViewController
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
@@ -41,6 +43,7 @@ open class TabsCoordinator: BaseCoordinator, ViewControlling {
     ///
     /// - Parameter tabCoordinators:
     ///     Array of coordinators, each for a single tab of tabBar.
+    @MainActor
     public func setCoordinatedTabs(_ tabCoordinators: [any AnyCoordinator]) {
         var viewControllers = [UIViewController]()
         for tab in tabCoordinators {

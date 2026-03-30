@@ -26,6 +26,7 @@ open class BaseCoordinator: Coordinating, DetachedTransitionHandling {
     
     // MARK: Init
     
+    @MainActor
     public init(sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
         self.sharedDependencyContainer = sharedDependencyContainer
         preconditionData.isEmpty ? prepareToStart() : prepareToStart(with: preconditionData)
@@ -37,6 +38,7 @@ open class BaseCoordinator: Coordinating, DetachedTransitionHandling {
     // --- Overridable ---
     
     /// Override this method to implement custom starting behavior for specific coordinator.
+    @MainActor
     open func start() {
         return
     }

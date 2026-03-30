@@ -28,6 +28,7 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     // MARK: Init
     
+    @MainActor
     public init(
         window: UIWindow?,
         type: AppCoordinatorType
@@ -49,6 +50,7 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     // --- Final ---
     
+    @MainActor
     public final override func start() {
         window?.rootViewController = self.rootViewController
         window?.makeKeyAndVisible()
@@ -64,10 +66,12 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     /// A good example of using this method is to call some methods needed
     /// a the very beginning of an app's lifecicle, before next coordinators
     /// will start, so the app can deside what to do next.
+    @MainActor
     open func appCoordinatorDidStart() {
         return
     }
     
+    @MainActor
     open func prepareCoordinator(for rootFlow: RootFlowType) -> any AnyCoordinator {
         fatalError("Please implement \(#function) method for setting up coordinators for app's root flows.")
     }
@@ -75,6 +79,7 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     // --- Final ---
     
+    @MainActor
     public final func shouldStartCoordinatedRootFlow(
         _ rootFlow: RootFlowType,
         withOptions options: UIView.AnimationOptions? = nil,

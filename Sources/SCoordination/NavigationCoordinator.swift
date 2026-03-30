@@ -20,11 +20,13 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     
     // MARK: Init
     
+    @MainActor
     public override init(sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
         self.rootViewController = UINavigationController()
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
     }
     
+    @MainActor
     public init(rootViewController: UINavigationController, sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:], onStop: NavigationCompletion = .doNothing) {
         self.rootViewController = rootViewController
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
@@ -37,6 +39,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         navigateTo(.initial)
     }
     
+    @MainActor
     open func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition {
         fatalError("Please implement \(#function) method for setting up navigation from NavigationCoordinator.")
     }
