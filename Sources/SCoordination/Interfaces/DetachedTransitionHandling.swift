@@ -20,6 +20,8 @@ public protocol DetachedTransitionHandling {
 }
 
 extension DetachedTransitionHandling {
+    
+    @MainActor
     public func performDetachedTransition(_ context: DetachedContext<some Reason>) {
         context.performDetachedTransition()
     }    

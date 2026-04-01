@@ -10,10 +10,12 @@ import Foundation
 open class DetachedContext<ReasonType: Reason> {
     public var reason: ReasonType
     
+    @MainActor
     public init(reason: ReasonType) {
         self.reason = reason
     }
     
+    @MainActor
     open func performDetachedTransition() {
         return 
     }

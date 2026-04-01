@@ -7,4 +7,6 @@
 
 import Foundation
 
+/// A Reason why detached transition is wanted to be performed. Is encouraged
+/// to be implemted as an enum.
 public protocol Reason {}

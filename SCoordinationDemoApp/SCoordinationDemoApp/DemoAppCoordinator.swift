@@ -10,6 +10,7 @@ import SCoordination
 
 enum DemoAppRootFlow: RootFlow {
     case main
+    case detached
 }
 
 final class DemoAppCoordinator: AppCoordinator<DemoAppRootFlow> {
@@ -18,6 +19,8 @@ final class DemoAppCoordinator: AppCoordinator<DemoAppRootFlow> {
         switch rootFlow {
         case .main:
             DemoNavCoordinator(rootViewController: rootViewController as! UINavigationController)
+        case .detached:
+            DetachedCoordinator(rootViewController: rootViewController as! UINavigationController)
         }
     }
     
