@@ -47,7 +47,7 @@ extension Unowned: Routing where Value: Routing {
 // MARK: - DetachedTransitionHandling
 
 extension Unowned: DetachedTransitionHandling where Value: Routing {
-    public func performDetachedTransition(_ context: DetachedContext<some Reason>) {
+    public func performDetachedTransition(_ context: DetachedContext) {
         wrappedValue.performDetachedTransition(context)
     }
     

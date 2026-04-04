@@ -76,7 +76,7 @@ final class VCLevel1: UIViewController {
     
     @objc
     private func button2Tapped() {
-        router.performDetachedTransition(ExampleDetachedContext(reason: .moveToDetachedVS))
+        router.performDetachedTransition(ExampleDetachedContextWithReason(reason: .moveToDetachedVS))
     }
    
 }

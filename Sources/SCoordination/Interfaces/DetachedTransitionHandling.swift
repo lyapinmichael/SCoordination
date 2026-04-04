@@ -16,13 +16,39 @@ public protocol DetachedTransitionHandling {
     /// - Parameter context:
     ///     method takes some detached context in which it is specified how exactly a transition should
     ///     be performed.
-    func performDetachedTransition(_ context: DetachedContext<some Reason>)
+    func performDetachedTransition(_ context: DetachedContext)
 }
 
-extension DetachedTransitionHandling {
+public extension DetachedTransitionHandling {
     
     @MainActor
-    public func performDetachedTransition(_ context: DetachedContext<some Reason>) {
+    public func performDetachedTransition(_ context: DetachedContext) {
         context.performDetachedTransition()
-    }    
+    }
+    
+}
+
+public extension DetachedTransitionHandling where Self: ViewControlling {
+    
+    @MainActor
+    func performDetachedTransitionOnSelf<
+        C: SelfPerformingDetachedContext
+    >(
+        _ contextType: C.Type,
+    ) {
+        let context = C(performer: self)
+        context.performDetachedTransition()
+    }
+    
+    @MainActor
+    func performDetachedTransitionOnSelf<
+        C: SelfPerformingDetachedContextWithReason
+    >(
+        _ contextType: C.Type,
+        reason: C.R
+    ) {
+        let context = C(reason: reason, performer: self)
+        context.performDetachedTransition()
+    }
+    
 }
