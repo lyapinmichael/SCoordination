@@ -52,7 +52,6 @@ public protocol DetachedContextWithReason: DetachedContext {
 /// of main navigation tree.
 public protocol SelfPerformingDetachedContext: DetachedContext {
     
-    /// **P** stands for Performer
     var performer: any ViewControlling { get }
     
     @MainActor
@@ -62,7 +61,13 @@ public protocol SelfPerformingDetachedContext: DetachedContext {
 
 /// A variation of `SelfPerformingDetachedContext` that also accepts some reason and so may vary
 /// it's transition depending on which reason is passed.
-public protocol SelfPerformingDetachedContextWithReason: SelfPerformingDetachedContext, DetachedContextWithReason {
+public protocol SelfPerformingDetachedContextWithReason: DetachedContext {
+    
+    /// **R** stands for Reason
+    associatedtype R: Reason
+    
+    var reason: R { get }
+    var performer: any ViewControlling { get }
     
     @MainActor
     init(reason: R, performer: any ViewControlling)
