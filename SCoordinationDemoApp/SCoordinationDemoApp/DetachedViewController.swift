@@ -15,6 +15,7 @@ final class DetachedViewController: UIViewController {
     private lazy var stack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
           button1,
+          button2,
         ])
         stack.axis = .vertical
         stack.spacing = 10
@@ -27,6 +28,16 @@ final class DetachedViewController: UIViewController {
         button.setTitle("Perform detached transition to ViewController", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var button2: UIButton = {
+        let button = UIButton()
+        button.setTitle("Perform detached transition on router as performer", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.backgroundColor = .systemGray
+        button.addTarget(self, action: #selector(button2Tapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -45,13 +56,24 @@ final class DetachedViewController: UIViewController {
         view.addSubview(stack)
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stack.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -32)
         ])
     }
     
     @objc
     private func button1Tapped() {
-        router.performDetachedTransition(ExampleDetachedContext(reason: .moveToBaseTree))
+        router.performDetachedTransition(
+            ExampleDetachedContextWithReason.self,
+            reason: .moveToBaseTree
+        )
+    }
+    
+    @objc
+    private func button2Tapped() {
+        router.performDetachedTransition(
+            ExampleSimpleSelfPerformingContext.self
+        )
     }
     
 }
