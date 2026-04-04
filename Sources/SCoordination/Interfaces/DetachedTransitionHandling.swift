@@ -16,11 +16,14 @@ public protocol DetachedTransitionHandling {
     /// - Parameter context:
     ///     method takes some detached context in which it is specified how exactly a transition should
     ///     be performed.
+    @available(*, deprecated, message: "Use overloads with provided context type")
     func performDetachedTransition(_ context: DetachedContext)
+    
 }
 
 public extension DetachedTransitionHandling {
     
+    @available(*, deprecated, message: "Use overloads with provided context type")
     @MainActor
     public func performDetachedTransition(_ context: DetachedContext) {
         context.performDetachedTransition()
@@ -31,23 +34,36 @@ public extension DetachedTransitionHandling {
 public extension DetachedTransitionHandling where Self: ViewControlling {
     
     @MainActor
-    func performDetachedTransitionOnSelf<
-        C: SelfPerformingDetachedContext
-    >(
-        _ contextType: C.Type,
+    func performDetachedTransition<C: InstantiatableDetachedContext>(
+        _ contextType: C.Type
     ) {
-        let context = C(performer: self)
+        let context = contextType.init()
         context.performDetachedTransition()
     }
     
     @MainActor
-    func performDetachedTransitionOnSelf<
-        C: SelfPerformingDetachedContextWithReason
-    >(
+    func performDetachedTransition<C: DetachedContextWithReason>(
         _ contextType: C.Type,
         reason: C.R
     ) {
-        let context = C(reason: reason, performer: self)
+        let context = contextType.init(reason: reason)
+        context.performDetachedTransition()
+    }
+    
+    @MainActor
+    func performDetachedTransition<C: SelfPerformingDetachedContext>(
+        _ contextType: C.Type,
+    ) {
+        let context = contextType.init(performer: self)
+        context.performDetachedTransition()
+    }
+    
+    @MainActor
+    func performDetachedTransition<C: SelfPerformingDetachedContextWithReason>(
+        _ contextType: C.Type,
+        reason: C.R
+    ) {
+        let context = contextType.init(reason: reason, performer: self)
         context.performDetachedTransition()
     }
     

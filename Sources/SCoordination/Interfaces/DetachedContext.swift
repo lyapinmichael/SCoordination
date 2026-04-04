@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// The most general meta-type requiring just a method to perform transtion. Is a main pure-behavioural contract
-///  for every `DetachedTransitionHandling` type.
+/// The most general meta-type requiring just a method to perform transtion. Is a main **purely-behavioural**
+///  contract for every `DetachedTransitionHandling` type.
 ///
 /// `DetachedTransitionHandling` will just fire-and-forget the implementation of `performDetahcedTransition`, not even knowing what exactly is happening under the hood.
 public protocol DetachedContext {
@@ -16,6 +16,14 @@ public protocol DetachedContext {
     @MainActor
     func performDetachedTransition()
    
+}
+
+/// A thin wrapper providing default initializer
+public protocol InstantiatableDetachedContext: DetachedContext {
+    
+    @MainActor
+    init()
+    
 }
 
 /// A special `DetachedContext` that may have different reasons, that are supposedly mentally tightly bound.

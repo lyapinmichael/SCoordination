@@ -63,12 +63,15 @@ final class DetachedViewController: UIViewController {
     
     @objc
     private func button1Tapped() {
-        router.performDetachedTransition(ExampleDetachedContextWithReason(reason: .moveToBaseTree))
+        router.performDetachedTransition(
+            ExampleDetachedContextWithReason.self,
+            reason: .moveToBaseTree
+        )
     }
     
     @objc
     private func button2Tapped() {
-        router.performDetachedTransitionOnSelf(
+        router.performDetachedTransition(
             ExampleSimpleSelfPerformingContext.self
         )
     }

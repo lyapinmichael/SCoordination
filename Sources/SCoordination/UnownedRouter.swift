@@ -42,19 +42,15 @@ extension Unowned: Routing where Value: Routing {
     public func prepareNavigationTransition(for destination: Value.DestinationType) -> NavigationTransition {
         wrappedValue.prepareNavigationTransition(for: destination)
     }
-}
-
-// MARK: - DetachedTransitionHandling
-
-extension Unowned: DetachedTransitionHandling where Value: Routing {
-    public func performDetachedTransition(_ context: DetachedContext) {
-        wrappedValue.performDetachedTransition(context)
-    }
     
     public func shouldStop() {
         wrappedValue.shouldStop()
     }
 }
+
+// MARK: - Detached transition handling
+
+extension Unowned: DetachedTransitionHandling where Value: Routing {}
 
 // MARK: - Reference counting
 

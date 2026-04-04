@@ -16,7 +16,6 @@ enum DemoNavDestination: Destination {
 
 final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
     
-    
     override func prepareNavigationTransition(for destination: DemoNavDestination) -> NavigationTransition {
         switch destination {
         case .initial:
