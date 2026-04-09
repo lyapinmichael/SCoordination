@@ -53,6 +53,12 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         case .shouldPopLastViewController(let animated):
             rootViewController.presentedViewController?.dismiss(animated: animated)
             rootViewController.popViewController(animated: animated)
+        case .shouldDismiss(let animated, let completion):
+            guard rootViewController.isBeingPresented else {
+                assertionFailure("Was assumed that root is presenetd, however it is not presented modally. Check hierarchy")
+                break
+            }
+            rootViewController.dismiss(animated: animated, completion: completion)
         case .doNothing:
             break
         }
@@ -66,6 +72,10 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     public enum NavigationCompletion {
         case shouldClearViewHeirarchy
         case shouldPopLastViewController(animated: Bool)
+        case shouldDismiss(
+            animated: Bool = true,
+            completion: () -> Void = {}
+        )
         case doNothing
     }
 }
