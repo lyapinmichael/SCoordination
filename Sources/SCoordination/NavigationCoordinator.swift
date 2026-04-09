@@ -54,7 +54,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
             rootViewController.presentedViewController?.dismiss(animated: animated)
             rootViewController.popViewController(animated: animated)
         case .shouldDismiss(let animated, let completion):
-            guard rootViewController.isBeingPresented else {
+            guard rootViewController.presentingViewController != nil else {
                 assertionFailure("Was assumed that root is presenetd, however it is not presented modally. Check hierarchy")
                 break
             }
