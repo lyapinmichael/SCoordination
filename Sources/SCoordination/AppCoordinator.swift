@@ -16,13 +16,14 @@ public enum AppCoordinatorType {
 /// This class is encouraged to be instantiated in SceneDelegate (AppDelegate) and to stay alive while
 /// app is running.
 open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
+    
     public static var shared: AppCoordinator<RootFlowType> {
         SharedStore.get(String(describing: RootFlowType.self))
     }
     
-    public private(set) var rootViewController: ProxyingViewController
-    
     // MARK: Private properties
+    
+    private var _rootViewController: ProxyingViewController
     
     private let window: UIWindow?
     
@@ -34,7 +35,7 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
         type: AppCoordinatorType
     ) {
         self.window = window
-        self.rootViewController = switch type {
+        self._rootViewController = switch type {
         case .navigating:
             UINavigationController()
         case .proxy:
@@ -92,10 +93,16 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
         if clearingGlobalDependencies { GlobalDependencyContainer.clearAll() }
         addChild(newRootCoordinator)
         let newRootViewController = newRootCoordinator.rootViewController
-        rootViewController.switchCurrent(to: newRootViewController, withOptions: options)
+        _rootViewController.switchCurrent(to: newRootViewController, withOptions: options)
     }
     
     deinit {
         print("did deinit app coordinator where shouldn't")
     }
+}
+
+extension AppCoordinator: ViewControlling {
+    
+    public var rootViewController: UIViewController { _rootViewController as UIViewController }
+    
 }
