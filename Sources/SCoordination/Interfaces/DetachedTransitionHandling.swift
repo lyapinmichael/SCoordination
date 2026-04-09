@@ -25,13 +25,13 @@ public extension DetachedTransitionHandling {
     
     @available(*, deprecated, message: "Use overloads with provided context type")
     @MainActor
-    public func performDetachedTransition(_ context: DetachedContext) {
+    func performDetachedTransition(_ context: DetachedContext) {
         context.performDetachedTransition()
     }
     
 }
 
-public extension DetachedTransitionHandling where Self: ViewControlling {
+public extension DetachedTransitionHandling {
     
     @MainActor
     func performDetachedTransition<C: InstantiatableDetachedContext>(
@@ -49,6 +49,10 @@ public extension DetachedTransitionHandling where Self: ViewControlling {
         let context = contextType.init(reason: reason)
         context.performDetachedTransition()
     }
+    
+}
+
+public extension DetachedTransitionHandling where Self: ViewControlling {
     
     @MainActor
     func performDetachedTransition<C: SelfPerformingDetachedContext>(
