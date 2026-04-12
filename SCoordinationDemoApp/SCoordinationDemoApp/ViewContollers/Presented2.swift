@@ -16,7 +16,8 @@ final class Presented2VC: UIViewController {
         let stack = UIStackView(arrangedSubviews: [
           messageLabel,
           button1,
-          button2
+          button2,
+          button3
         ])
         stack.axis = .vertical
         stack.spacing = 10
@@ -50,6 +51,15 @@ final class Presented2VC: UIViewController {
         return button
     }()
     
+    private lazy var button3: UIButton = {
+        let button = UIButton(configuration: .gray())
+        button.setTitle("Dismiss all and push to other", for: .normal)
+        button.setTitleColor(.systemGreen, for: .normal)
+        button.addTarget(self, action: #selector(button3Tapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     init(router: UnownedRouter<DemoNavDestination>) {
         self.router = router
         super.init(nibName: nil, bundle: nil)
@@ -77,5 +87,10 @@ final class Presented2VC: UIViewController {
     @objc
     private func button2Tapped() {
         router.dismissAll()
+    }
+    
+    @objc
+    private func button3Tapped() {
+        router.navigateTo(.compositePush)
     }
 }

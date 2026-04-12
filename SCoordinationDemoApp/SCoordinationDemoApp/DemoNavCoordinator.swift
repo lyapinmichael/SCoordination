@@ -14,7 +14,7 @@ enum DemoNavDestination: Destination {
     case level2
     case present1
     case present2
-    case composite
+    case compositePush
 }
 
 final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
@@ -22,21 +22,24 @@ final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
     override func prepareNavigationTransition(for destination: DemoNavDestination) -> NavigationTransition {
         switch destination {
         case .initial:
-                .setSingleViewController(ViewController(router: unownedRouter))
+                return .setSingleViewController(ViewController(router: unownedRouter))
         case .level1:
-                .push(VCLevel1(router: unownedRouter))
+            return .push(VCLevel1(router: unownedRouter))
         case .level2:
-                .push(VCLevel2(router: unownedRouter))
+            return .push(VCLevel2(router: unownedRouter))
         case .present1:
-                .present(
+            return .present(
                     Presented1VC(router: unownedRouter),
                     presentationStyle: .overCurrentContext
                 )
         case .present2:
-                .present(
+            return .present(
                     Presented2VC(router: unownedRouter),
                     presentationStyle: .formSheet
                 )
+        case .compositePush:
+            dismissAll(animated: true)
+            return .push(CompositePushed(router: unownedRouter))
         }
     }
     
