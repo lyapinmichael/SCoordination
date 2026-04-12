@@ -7,7 +7,8 @@
 
 import UIKit
 
-open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator, ViewControlling, Routing {
+open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator, ExtendedNavigationHandling {
+    
     public typealias RootViewController = UINavigationController
     
     // MARK: Public properties
