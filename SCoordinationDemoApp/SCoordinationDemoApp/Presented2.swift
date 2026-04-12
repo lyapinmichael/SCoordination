@@ -1,14 +1,14 @@
 //
-//  ViewController.swift
+//  Presented1.swift
 //  SCoordinationDemoApp
 //
-//  Created by Ляпин Михаил on 30.03.2026.
+//  Created by Ляпин Михаил on 12.04.2026.
 //
 
 internal import UIKit
 import SCoordination
 
-class ViewController: UIViewController {
+final class Presented2VC: UIViewController {
     
     private var router: UnownedRouter<DemoNavDestination>
     
@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: [
           messageLabel,
           button1,
-          button2,
+          button2
         ])
         stack.axis = .vertical
         stack.spacing = 10
@@ -26,25 +26,25 @@ class ViewController: UIViewController {
     
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Root in navigation heirarchy"
+        label.text = "Demonstration of modal presentation hierarchy"
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var button1: UIButton = {
-        let button = UIButton()
-        button.setTitle("Go to Level 1", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
+        let button = UIButton(configuration: .gray())
+        button.setTitle("Dismiss this one", for: .normal)
+        button.setTitleColor(.systemOrange, for: .normal)
         button.addTarget(self, action: #selector(button1Tapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private lazy var button2: UIButton = {
-        let button = UIButton()
-        button.setTitle("Present modal VCs", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
+        let button = UIButton(configuration: .gray())
+        button.setTitle("Dismiss all", for: .normal)
+        button.setTitleColor(.systemRed, for: .normal)
         button.addTarget(self, action: #selector(button2Tapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -61,7 +61,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray5
         view.addSubview(stack)
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -71,13 +71,11 @@ class ViewController: UIViewController {
     
     @objc
     private func button1Tapped() {
-        router.navigateTo(.level1)
+        router.dismiss()
     }
     
     @objc
     private func button2Tapped() {
-        router.navigateTo(.present1)
+        router.dismissAll()
     }
-
 }
-

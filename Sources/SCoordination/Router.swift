@@ -22,6 +22,7 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
     private var _popToRoot: (Bool) -> Void
     private var _pop: (Bool) -> Void
     private var _dismiss: (Bool, (() -> Void)?) -> Void
+    private var _dismissAll: (Bool, (() -> Void)?) -> Void
     
     // MARK: Init
     
@@ -33,6 +34,7 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
         self._popToRoot = router.popToRoot
         self._pop = router.pop
         self._dismiss = router.dismiss
+        self._dismissAll = router.dismissAll
         self.referenceCounter = referenceCounter
         self.referenceCounter.listener = self
     }
@@ -53,6 +55,10 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
     
     public func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
         _dismiss(animated, completion)
+    }
+    
+    public func dismissAll(animated: Bool = true, completion: (() -> Void)? = nil) {
+        _dismissAll(animated, completion)
     }
     
     public func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition {

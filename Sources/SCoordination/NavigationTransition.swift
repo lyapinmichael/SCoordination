@@ -79,7 +79,9 @@ public struct NavigationTransition {
         switch navigationType {
         case .modal(let presentationStyle, let completion):
             nextViewController.modalPresentationStyle = presentationStyle
-            navigationController.present(nextViewController,
+            navigationController
+                .topmostViewContoller
+                .present(nextViewController,
                                          animated: animated,
                                          completion: completion)
         case .pushing:

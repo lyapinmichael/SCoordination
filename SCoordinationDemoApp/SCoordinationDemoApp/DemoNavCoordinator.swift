@@ -12,6 +12,9 @@ enum DemoNavDestination: Destination {
     case initial
     case level1
     case level2
+    case present1
+    case present2
+    case composite
 }
 
 final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
@@ -24,6 +27,16 @@ final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
                 .push(VCLevel1(router: unownedRouter))
         case .level2:
                 .push(VCLevel2(router: unownedRouter))
+        case .present1:
+                .present(
+                    Presented1VC(router: unownedRouter),
+                    presentationStyle: .overCurrentContext
+                )
+        case .present2:
+                .present(
+                    Presented2VC(router: unownedRouter),
+                    presentationStyle: .formSheet
+                )
         }
     }
     

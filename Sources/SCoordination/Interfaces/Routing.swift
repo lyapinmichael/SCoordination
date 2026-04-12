@@ -26,6 +26,8 @@ public protocol Routing: ViewControlling, DetachedTransitionHandling {
     
     func dismiss(animated: Bool, completion: (() -> Void)?)
     
+    func dismissAll(animated: Bool, completion: (() -> Void)?)
+    
     /// Used to perform navigation with `UINavigationController` stored as
     /// `rootViewController` of `NavigationCoordinator`.
     ///
@@ -59,6 +61,10 @@ extension Routing where RootViewController == UINavigationController {
     public func dismiss(animated: Bool, completion: (() -> Void)?) {
         rootViewController.presentedViewController?.dismiss(animated: animated, completion: completion)
     }
+    
+    public func dismissAll(animated: Bool, completion: (() -> Void)? = nil) {
+        rootViewController.dismiss(animated: animated, completion: completion)
+    }
 }
 
 extension Routing where RootViewController == UINavigationController, Self: ReferenceCounting {
@@ -69,17 +75,11 @@ extension Routing where RootViewController == UINavigationController, Self: Refe
 
 public protocol ExtendedNavigationHandling: Routing {
     
-    func dismissAll(animated: Bool, completion: (() -> Void)?)
-    
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool)
     
 }
 
 public extension ExtendedNavigationHandling where RootViewController == UINavigationController {
-    
-    func dismissAll(animated: Bool, completion: (() -> Void)? = nil) {
-        rootViewController.dismiss(animated: animated, completion: completion)
-    }
     
     func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
         rootViewController.setViewControllers(viewControllers, animated: animated)
