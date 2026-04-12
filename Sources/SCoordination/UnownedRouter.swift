@@ -23,6 +23,8 @@ extension Unowned: ViewControlling where Value: ViewControlling {
 // MARK: - Routing
 
 extension Unowned: Routing where Value: Routing {
+ 
+    
     public func navigateTo(_ destination: Value.DestinationType) {
         wrappedValue.navigateTo(destination)
     }
@@ -35,8 +37,8 @@ extension Unowned: Routing where Value: Routing {
         wrappedValue.pop(animated: animated)
     }
     
-    public func dismiss(animated: Bool = true) {
-        wrappedValue.dismiss(animated: animated)
+    public func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        wrappedValue.dismiss(animated: animated, completion: completion)
     }
     
     public func prepareNavigationTransition(for destination: Value.DestinationType) -> NavigationTransition {

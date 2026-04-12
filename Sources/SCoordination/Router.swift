@@ -21,7 +21,7 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
     private var _shouldStop: () -> Void
     private var _popToRoot: (Bool) -> Void
     private var _pop: (Bool) -> Void
-    private var _dismiss: (Bool) -> Void
+    private var _dismiss: (Bool, (() -> Void)?) -> Void
     
     // MARK: Init
     
@@ -51,8 +51,8 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
         _pop(animated)
     }
     
-    public func dismiss(animated: Bool = true) {
-        _dismiss(animated)
+    public func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        _dismiss(animated, completion)
     }
     
     public func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition {
