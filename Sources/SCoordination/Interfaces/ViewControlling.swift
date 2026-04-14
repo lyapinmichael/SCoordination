@@ -12,6 +12,10 @@ import UIKit
 public protocol ViewControlling {
     associatedtype RootViewController: UIViewController
     var rootViewController: RootViewController { get }
+    
+    func dismiss(animated: Bool, completion: (() -> Void)?)
+    
+    func dismissAll(animated: Bool, completion: (() -> Void)?)
 }
 
 public extension ViewControlling {
@@ -31,6 +35,14 @@ public extension ViewControlling {
                 animated: animated,
                 completion: completion
             )
+    }
+    
+    func dismiss(animated: Bool, completion: (() -> Void)?) {
+        rootViewController.presentedViewController?.dismiss(animated: animated, completion: completion)
+    }
+    
+    func dismissAll(animated: Bool, completion: (() -> Void)? = nil) {
+        rootViewController.dismiss(animated: animated, completion: completion)
     }
     
 }

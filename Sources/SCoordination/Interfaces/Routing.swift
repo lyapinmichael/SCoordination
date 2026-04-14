@@ -24,10 +24,6 @@ public protocol Routing: ViewControlling, DetachedTransitionHandling {
     
     func popToRoot(animated: Bool)
     
-    func dismiss(animated: Bool, completion: (() -> Void)?)
-    
-    func dismissAll(animated: Bool, completion: (() -> Void)?)
-    
     /// Used to perform navigation with `UINavigationController` stored as
     /// `rootViewController` of `NavigationCoordinator`.
     ///
@@ -58,13 +54,7 @@ extension Routing where RootViewController == UINavigationController {
         rootViewController.popViewController(animated: animated)
     }
     
-    public func dismiss(animated: Bool, completion: (() -> Void)?) {
-        rootViewController.presentedViewController?.dismiss(animated: animated, completion: completion)
-    }
-    
-    public func dismissAll(animated: Bool, completion: (() -> Void)? = nil) {
-        rootViewController.dismiss(animated: animated, completion: completion)
-    }
+ 
 }
 
 extension Routing where RootViewController == UINavigationController, Self: ReferenceCounting {
