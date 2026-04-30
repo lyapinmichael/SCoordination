@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator, ExtendedNavigationHandling {
+open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator, @MainActor ExtendedNavigationHandling {
     
     public typealias RootViewController = UINavigationController
     
@@ -32,6 +32,17 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         self.rootViewController = rootViewController
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
         self.onStop = onStop
+    }
+    
+    @MainActor
+    public init(
+        over viewController: UIViewController,
+        sharedDependencyContainer: ModuleDependencyContainer? = nil,
+        with preconditionData: [String: Any] = [:]
+    ) {
+        self.rootViewController = UINavigationController()
+        super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
+        self.onStop = .shouldDismiss(animated: false, completion: {})
     }
     
     // MARK: Open methods
@@ -66,19 +77,10 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         super.stop()
     }
     
-    public func shouldStop() {
+    open func shouldStop() {
         stop()
     }
     
-    public enum NavigationCompletion {
-        case shouldClearViewHeirarchy
-        case shouldPopLastViewController(animated: Bool)
-        case shouldDismiss(
-            animated: Bool = true,
-            completion: () -> Void = {}
-        )
-        case doNothing
-    }
 }
 
 // MARK: Router

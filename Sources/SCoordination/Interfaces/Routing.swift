@@ -62,17 +62,3 @@ extension Routing where RootViewController == UINavigationController, Self: Refe
         Router(self, referenceCounter: self.referenceCounter)
     }    
 }
-
-public protocol ExtendedNavigationHandling: Routing {
-    
-    func setViewControllers(_ viewControllers: [UIViewController], animated: Bool)
-    
-}
-
-public extension ExtendedNavigationHandling where RootViewController == UINavigationController {
-    
-    func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-        rootViewController.setViewControllers(viewControllers, animated: animated)
-    }
-    
-}
