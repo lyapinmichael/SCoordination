@@ -41,8 +41,14 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         with preconditionData: [String: Any] = [:]
     ) {
         self.rootViewController = UINavigationController()
-        super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
+        self.rootViewController.modalPresentationStyle = .overFullScreen
         self.onStop = .shouldDismiss(animated: false, completion: {})
+        super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
+        guard viewController.isViewLoaded else {
+            assertionFailure("underlying controller's view should have already been loaded")
+            return
+        }
+        viewController.present(self.rootViewController, animated: false)
     }
     
     // MARK: Open methods
