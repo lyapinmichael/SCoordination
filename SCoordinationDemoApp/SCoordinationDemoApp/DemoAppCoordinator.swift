@@ -15,17 +15,19 @@ enum DemoAppRootFlow: RootFlow {
 
 final class DemoAppCoordinator: AppCoordinator<DemoAppRootFlow> {
     
+    private let navController = UINavigationController()
+    
     override func prepareCoordinator(for rootFlow: DemoAppRootFlow) -> any AnyCoordinator {
         switch rootFlow {
         case .main:
-            DemoNavCoordinator(rootViewController: (rootViewController as! UINavigationController))
+            DemoNavCoordinator(rootViewController: navController)
         case .detached:
-            DetachedCoordinator(rootViewController: (rootViewController as! UINavigationController))
+            DetachedCoordinator(rootViewController: navController)
         }
     }
     
     override func appCoordinatorDidStart() {
-        shouldStartCoordinatedRootFlow(.main)
+        startRootFlow(.main)
     }
     
 }

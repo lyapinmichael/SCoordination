@@ -20,9 +20,9 @@ struct ExampleDetachedContextWithReason: DetachedContextWithReason {
     func performDetachedTransition() {
         switch reason {
         case .moveToDetachedVS:
-            DemoAppCoordinator.shared.shouldStartCoordinatedRootFlow(.detached)
+            DemoAppCoordinator.shared.startRootFlow(.detached)
         case .moveToBaseTree:
-            DemoAppCoordinator.shared.shouldStartCoordinatedRootFlow(.main, withOptions: [.transitionFlipFromRight])
+            DemoAppCoordinator.shared.startRootFlow(.main, withOptions: [.transitionFlipFromRight])
         }
     }
     

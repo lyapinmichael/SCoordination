@@ -7,6 +7,7 @@
 
 import UIKit
 
+@available(*, deprecated, message: "will be deleted in future versions")
 public enum AppCoordinatorType {
     case navigating
     case proxy
@@ -23,8 +24,6 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     // MARK: Private properties
     
-    private var _rootViewController: ProxyingViewController
-    
     private let window: UIWindow?
     
     // MARK: Init
@@ -35,14 +34,6 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
         type: AppCoordinatorType
     ) {
         self.window = window
-        self._rootViewController = switch type {
-        case .navigating:
-            UINavigationController()
-        case .proxy:
-            ProxyViewController()
-        case .custom(let proxyingViewController):
-            proxyingViewController
-        }
         super.init()
         SharedStore.add(self, forKey: String(describing: RootFlowType.self))
     }
@@ -53,7 +44,6 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     @MainActor
     public final override func start() {
-        window?.rootViewController = self.rootViewController
         window?.makeKeyAndVisible()
         appCoordinatorDidStart()
     }
@@ -76,14 +66,16 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     open func prepareCoordinator(for rootFlow: RootFlowType) -> any AnyCoordinator {
         fatalError("Please implement \(#function) method for setting up coordinators for app's root flows.")
     }
+    
     // MARK: Public methods
     
     // --- Final ---
     
     @MainActor
-    public final func shouldStartCoordinatedRootFlow(
+    public final func startRootFlow(
         _ rootFlow: RootFlowType,
-        withOptions options: UIView.AnimationOptions? = nil,
+        transitionDuration: TimeInterval = 0.3,
+        withOptions options: UIView.AnimationOptions = [],
         clearingGlobalDependencies: Bool = false
     ) {
         childCoordinators.forEach { childCoordinator in
@@ -93,16 +85,29 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
         if clearingGlobalDependencies { GlobalDependencyContainer.clearAll() }
         addChild(newRootCoordinator)
         let newRootViewController = newRootCoordinator.rootViewController
-        _rootViewController.switchCurrent(to: newRootViewController, withOptions: options)
+        guard let window else {
+            assertionFailure("should have passed a window for proper app coordination")
+            return
+        }
+        UIView.transition(with: window, duration: 0.2, options: options) {
+            self.window?.rootViewController = newRootViewController
+        }
     }
     
-    deinit {
-        print("did deinit app coordinator where shouldn't")
+    @available(*, deprecated, renamed: "startRootFlow", message: "will be deleted in future versions")
+    @MainActor
+    public final func shouldStartCoordinatedRootFlow(
+        _ rootFlow: RootFlowType,
+        transitionDuration: TimeInterval = 0.3,
+        withOptions options: UIView.AnimationOptions = [],
+        clearingGlobalDependencies: Bool = false
+    ) {
+        startRootFlow(
+            rootFlow,
+            transitionDuration: transitionDuration,
+            withOptions: options,
+            clearingGlobalDependencies: clearingGlobalDependencies
+        )
     }
-}
-
-extension AppCoordinator: ViewControlling {
-    
-    public var rootViewController: UIViewController { _rootViewController as UIViewController }
-    
+        
 }
