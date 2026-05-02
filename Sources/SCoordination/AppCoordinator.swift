@@ -44,7 +44,7 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
     @MainActor
     public final override func start() {
-        window?.makeKeyAndVisible()
+        self.window?.makeKeyAndVisible()
         appCoordinatorDidStart()
     }
     
@@ -82,14 +82,13 @@ open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
             childCoordinator.stop()
         }
         let newRootCoordinator = prepareCoordinator(for: rootFlow)
-        if clearingGlobalDependencies { GlobalDependencyContainer.clearAll() }
         addChild(newRootCoordinator)
         let newRootViewController = newRootCoordinator.rootViewController
         guard let window else {
             assertionFailure("should have passed a window for proper app coordination")
             return
         }
-        UIView.transition(with: window, duration: 0.2, options: options) {
+        UIView.transition(with: window, duration: transitionDuration, options: options) {
             self.window?.rootViewController = newRootViewController
         }
     }
