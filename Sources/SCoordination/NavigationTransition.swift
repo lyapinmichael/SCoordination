@@ -85,11 +85,20 @@ public struct NavigationTransition {
                                          animated: animated,
                                          completion: completion)
         case .pushing:
-            navigationController.pushViewController(nextViewController, 
-                                                    animated: animated)
+            navigationController.presentedViewController?.dismiss(animated: animated) {
+                navigationController.pushViewController(
+                    nextViewController,
+                    animated: animated
+                )
+            }
         case .setting:
-            navigationController.setViewControllers([nextViewController],
-                                                    animated: animated)
+            navigationController.presentedViewController?.dismiss(animated: animated) {
+                navigationController.setViewControllers(
+                    [nextViewController],
+                    animated: animated
+                )
+            }
+            
         }
     }    
 }
