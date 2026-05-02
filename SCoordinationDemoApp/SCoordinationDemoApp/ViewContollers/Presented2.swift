@@ -17,7 +17,8 @@ final class Presented2VC: UIViewController {
           messageLabel,
           button1,
           button2,
-          button3
+          button3,
+          button4
         ])
         stack.axis = .vertical
         stack.spacing = 10
@@ -60,6 +61,15 @@ final class Presented2VC: UIViewController {
         return button
     }()
     
+    private lazy var button4: UIButton = {
+        let button = UIButton(configuration: .gray())
+        button.setTitle("Start subcoodinator", for: .normal)
+        button.setTitleColor(.systemGreen, for: .normal)
+        button.addTarget(self, action: #selector(button4Tapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     init(router: UnownedRouter<DemoNavDestination>) {
         self.router = router
         super.init(nibName: nil, bundle: nil)
@@ -92,5 +102,10 @@ final class Presented2VC: UIViewController {
     @objc
     private func button3Tapped() {
         router.navigateTo(.compositePush)
+    }
+    
+    @objc
+    private func button4Tapped() {
+        router.navigateTo(.subcoordinator)
     }
 }

@@ -52,6 +52,7 @@ open class BaseCoordinator: Coordinating, DetachedTransitionHandling {
     /// - Parameter preconditionData:
     ///     Receives some dictionary with data, passed a initialization time of
     ///     this coordinator.
+    @MainActor
     open func prepareToStart(with preconditionData: [String: Any]) {
         return
     }
@@ -61,6 +62,7 @@ open class BaseCoordinator: Coordinating, DetachedTransitionHandling {
     ///
     /// Override this method to implement custom behavior that is triggered right
     /// when this coordinator id being initialized.
+    @MainActor
     open func prepareToStart() {
         return
     }

@@ -15,6 +15,7 @@ enum DemoNavDestination: Destination {
     case present1
     case present2
     case compositePush
+    case subcoordinator
 }
 
 final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
@@ -22,24 +23,42 @@ final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
     override func prepareNavigationTransition(for destination: DemoNavDestination) -> NavigationTransition {
         switch destination {
         case .initial:
-                return .setSingleViewController(ViewController(router: unownedRouter))
+            return .setSingleViewController(ViewController(router: unownedRouter))
         case .level1:
             return .push(VCLevel1(router: unownedRouter))
         case .level2:
             return .push(VCLevel2(router: unownedRouter))
         case .present1:
             return .present(
-                    Presented1VC(router: unownedRouter),
-                    presentationStyle: .overCurrentContext
-                )
+                Presented1VC(router: unownedRouter),
+                presentationStyle: .overCurrentContext
+            )
         case .present2:
             return .present(
-                    Presented2VC(router: unownedRouter),
-                    presentationStyle: .formSheet
-                )
+                Presented2VC(router: unownedRouter),
+                presentationStyle: .formSheet
+            )
         case .compositePush:
             dismissAll(animated: true)
             return .push(CompositePushed(router: unownedRouter))
+        case .subcoordinator:
+            let subcoordinator = DetachedCoordinator
+                .withContainerController(
+                    with: ["shouldConfigureNavBar": true]
+                )
+            return .present(
+                subcoordinator.rootViewController,
+                presentationStyle: .overFullScreen,
+                animated: false) {
+                    subcoordinator.navigateTo(.subcoordinating)
+                }
+//            let subcoordinator = DetachedCoordinator(
+//                over: self.rootViewController,
+//                with: ["shouldConfigureNavBar": true]
+//            )
+//            return subcoordinator.prepareNavigationTransition(
+//                for: .subcoordinating
+//            )
         }
     }
     

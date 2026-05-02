@@ -18,37 +18,53 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     // MARK: Private properties
     
     private var onStop: NavigationCompletion = .shouldClearViewHeirarchy
+    private let navigationDelegate: UINavigationControllerDelegate
     
     // MARK: Init
     
     @MainActor
-    public override init(sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
+    public required override init(sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:]) {
         self.rootViewController = UINavigationController()
+        let navigationDelegate = NavBarHandlingNavigationDelegate()
+        self.navigationDelegate = navigationDelegate
+        self.rootViewController.delegate = self.navigationDelegate
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
-    }
-    
-    @MainActor
-    public init(rootViewController: UINavigationController, sharedDependencyContainer: ModuleDependencyContainer? = nil, with preconditionData: [String: Any] = [:], onStop: NavigationCompletion = .doNothing) {
-        self.rootViewController = rootViewController
-        super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
-        self.onStop = onStop
+        navigationDelegate.onDidReachPlaceholderViewController = { [weak self] in
+            guard let self else { return }
+            self.stop()
+        }
     }
     
     @MainActor
     public init(
-        over viewController: UIViewController,
+        rootViewController: UINavigationController? = nil,
+        navigationDelegate: UINavigationControllerDelegate = NavBarHandlingNavigationDelegate(),
         sharedDependencyContainer: ModuleDependencyContainer? = nil,
-        with preconditionData: [String: Any] = [:]
+        with preconditionData: [String: Any] = [:],
+        onStop: NavigationCompletion = .doNothing
     ) {
-        self.rootViewController = UINavigationController()
-        self.rootViewController.modalPresentationStyle = .overFullScreen
-        self.onStop = .shouldDismiss(animated: false, completion: {})
+        self.rootViewController = rootViewController ?? UINavigationController()
+        self.navigationDelegate = navigationDelegate
+        self.rootViewController.delegate = self.navigationDelegate
+        self.onStop = onStop
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
-        guard viewController.isViewLoaded else {
-            assertionFailure("underlying controller's view should have already been loaded")
-            return
+        (navigationDelegate as? NavBarHandlingNavigationDelegate)?.onDidReachPlaceholderViewController = { [weak self] in
+            guard let self else { return }
+            self.stop()
         }
-        viewController.present(self.rootViewController, animated: false)
+    }
+    
+    @MainActor
+    public static func withContainerController(
+        sharedDependencyContainer: ModuleDependencyContainer? = nil,
+        with preconditionData: [String : Any] = [:],
+        onStop: NavigationCompletion = .shouldDismiss(animated: false)
+    ) -> Self {
+        let coordinator = Self(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
+        coordinator.onStop = onStop
+        let placeholderViewController = PlaceholderViewController()
+        coordinator.rootViewController.setViewControllers([placeholderViewController], animated: false)
+        return coordinator
     }
     
     // MARK: Open methods

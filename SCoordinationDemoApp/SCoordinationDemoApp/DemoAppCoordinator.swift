@@ -18,9 +18,9 @@ final class DemoAppCoordinator: AppCoordinator<DemoAppRootFlow> {
     override func prepareCoordinator(for rootFlow: DemoAppRootFlow) -> any AnyCoordinator {
         switch rootFlow {
         case .main:
-            DemoNavCoordinator(rootViewController: rootViewController as! UINavigationController)
+            DemoNavCoordinator(rootViewController: (rootViewController as! UINavigationController))
         case .detached:
-            DetachedCoordinator(rootViewController: rootViewController as! UINavigationController)
+            DetachedCoordinator(rootViewController: (rootViewController as! UINavigationController))
         }
     }
     
