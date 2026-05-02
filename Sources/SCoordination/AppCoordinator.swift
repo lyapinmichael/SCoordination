@@ -18,13 +18,13 @@ public enum AppCoordinatorType {
 /// app is running.
 open class AppCoordinator<RootFlowType: RootFlow>: BaseCoordinator {
     
+    // MARK: Public properties
+    
     public static var shared: AppCoordinator<RootFlowType> {
         SharedStore.get(String(describing: RootFlowType.self))
     }
     
-    // MARK: Private properties
-    
-    private let window: UIWindow?
+    public let window: UIWindow?
     
     // MARK: Init
     
