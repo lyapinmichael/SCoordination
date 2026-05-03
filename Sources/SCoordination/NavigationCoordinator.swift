@@ -31,7 +31,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
         navigationDelegate.onDidReachPlaceholderViewController = { [weak self] in
             guard let self else { return }
-            self.stop()
+            self.shouldStop()
         }
     }
     
@@ -50,7 +50,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         super.init(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
         (navigationDelegate as? NavBarHandlingNavigationDelegate)?.onDidReachPlaceholderViewController = { [weak self] in
             guard let self else { return }
-            self.stop()
+            self.shouldStop()
         }
     }
     
@@ -100,6 +100,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         super.stop()
     }
     
+    /// **NOTE**: Should always call `super.shouldStop` when overriding this method.
     open func shouldStop() {
         stop()
     }

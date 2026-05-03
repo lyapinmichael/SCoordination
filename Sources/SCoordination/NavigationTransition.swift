@@ -87,18 +87,18 @@ public struct NavigationTransition {
     ///     performing this transition.
     ///     - animated: Indicates if this transition should be animated. Is set
     ///     to `false` by default.
-    ///     - prependWithPlaceholder: a special flag, which if set to `true` adds `PlaceholderViewController`
-    ///     as a root of new navigation stack, so if only one view controller is set, it has a back button to
+    ///     - canPopFromRoot: a special flag, which if set to `true` adds `PlaceholderViewController`
+    ///     as a root of new navigation stack, so the root view controller it has a back button and can pop to
     ///     a translucent placeholder view, which then tells coordinator to stop.
     public static func setViewControllers(
         _ viewControllers: [UIViewController],
         animated: Bool = false,
-        prependWithPlaceholder: Bool = false
+        canPopFromRoot: Bool = false
     ) -> NavigationTransition {
         NavigationTransition(
             animated: animated,
             navigationType: .set(
-                prependWithPlaceholder
+                canPopFromRoot
                 ? [PlaceholderViewController()] + viewControllers
                 : viewControllers
             )
