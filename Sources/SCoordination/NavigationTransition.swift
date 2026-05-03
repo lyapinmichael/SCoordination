@@ -32,9 +32,11 @@ public struct NavigationTransition {
     ///     performing this transition.
     ///     - animated: Indicates if this transition should be animated. Default value is `true`.
     public static func push(_ viewController: UIViewController, animated: Bool = true) -> NavigationTransition {
-        NavigationTransition(nextViewController: viewController,
-                             animated: animated,
-                             navigationType: .pushing)
+        NavigationTransition(
+            nextViewController: viewController,
+            animated: animated,
+            navigationType: .pushing
+        )
     }
     
     /// Use this method to create a new transition of 'modal presentation' type.
@@ -46,11 +48,13 @@ public struct NavigationTransition {
     ///     - animated: Indicates if this transition should be animated.
     ///     - completion: A completion handler that will be executed after this
     ///     transition if performed.
-    public static func present(_ viewController: UIViewController, presentationStyle: UIModalPresentationStyle, animated: Bool = true, completion: @escaping () -> Void = {}) -> NavigationTransition {
-        NavigationTransition(nextViewController: viewController,
-                             animated: animated,
-                             navigationType: .modal(presentationStyle: presentationStyle,
-                                                    completion: completion))
+    public static func present(_ viewController: UIViewController, presentationStyle: UIModalPresentationStyle? = nil, animated: Bool = true, completion: @escaping () -> Void = {}) -> NavigationTransition {
+        NavigationTransition(
+            nextViewController: viewController,
+            animated: animated,
+            navigationType: .modal(presentationStyle: presentationStyle ?? viewController.modalPresentationStyle,
+                                   completion: completion)
+        )
     }
     
     /// Use this method to create a new transition that resets whole hiearachy
@@ -64,9 +68,11 @@ public struct NavigationTransition {
     ///     - animated: Indicates if this transition should be animated. Is set
     ///     to `false` by default.
     public static func setSingleViewController(_ viewController: UIViewController, animated: Bool = false) -> NavigationTransition {
-        NavigationTransition(nextViewController: viewController,
-                             animated: animated,
-                             navigationType: .setting)
+        NavigationTransition(
+            nextViewController: viewController,
+            animated: animated,
+            navigationType: .setting
+        )
     }
     
     // MARK: Public methods
@@ -81,9 +87,11 @@ public struct NavigationTransition {
             nextViewController.modalPresentationStyle = presentationStyle
             navigationController
                 .topmostViewContoller
-                .present(nextViewController,
-                                         animated: animated,
-                                         completion: completion)
+                .present(
+                    nextViewController,
+                    animated: animated,
+                    completion: completion
+                )
         case .pushing:
             gracefully(on: navigationController) {
                 navigationController.pushViewController(

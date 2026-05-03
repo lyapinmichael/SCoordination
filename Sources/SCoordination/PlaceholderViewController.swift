@@ -12,6 +12,7 @@ final class PlaceholderViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         shouldHideNavigationBar = true
+        modalPresentationStyle = .overFullScreen
     }
     
     required init?(coder: NSCoder) {
