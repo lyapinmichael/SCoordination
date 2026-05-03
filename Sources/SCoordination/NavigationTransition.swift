@@ -85,20 +85,28 @@ public struct NavigationTransition {
                                          animated: animated,
                                          completion: completion)
         case .pushing:
-            navigationController.presentedViewController?.dismiss(animated: animated) {
+            gracefully(on: navigationController) {
                 navigationController.pushViewController(
                     nextViewController,
                     animated: animated
                 )
             }
         case .setting:
-            navigationController.presentedViewController?.dismiss(animated: animated) {
+            gracefully(on: navigationController) {
                 navigationController.setViewControllers(
                     [nextViewController],
                     animated: animated
                 )
             }
-            
         }
-    }    
+    }
+    
+    private func gracefully(on navigationController: UINavigationController, perform: @escaping () -> Void) {
+        if let presented = navigationController.presentedViewController {
+            presented.dismiss(animated: animated, completion: perform)
+        } else {
+            perform()
+        }
+    }
+    
 }
