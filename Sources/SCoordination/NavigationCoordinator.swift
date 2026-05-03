@@ -64,6 +64,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         coordinator.onStop = onStop
         let placeholderViewController = PlaceholderViewController()
         coordinator.rootViewController.setViewControllers([placeholderViewController], animated: false)
+        coordinator.rootViewController.modalPresentationStyle = .overFullScreen
         return coordinator
     }
     
