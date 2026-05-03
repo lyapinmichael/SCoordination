@@ -8,15 +8,13 @@
 import UIKit
 
 public struct NavigationTransition {
-    private let nextViewController: UIViewController
     private let animated: Bool
     private let navigationType: NavigationType
     
     /// Initializer of `NavigationTransition` is private as either
     /// `push(_:animated:)` or `present(_:animated:)` should be used instead to
     ///  instantiate a certain transition
-    private init(nextViewController: UIViewController, animated: Bool, navigationType: NavigationType) {
-        self.nextViewController = nextViewController
+    private init(animated: Bool, navigationType: NavigationType) {
         self.animated = animated
         self.navigationType = navigationType
     }
@@ -33,9 +31,8 @@ public struct NavigationTransition {
     ///     - animated: Indicates if this transition should be animated. Default value is `true`.
     public static func push(_ viewController: UIViewController, animated: Bool = true) -> NavigationTransition {
         NavigationTransition(
-            nextViewController: viewController,
             animated: animated,
-            navigationType: .pushing
+            navigationType: .push(viewController)
         )
     }
     
@@ -50,10 +47,12 @@ public struct NavigationTransition {
     ///     transition if performed.
     public static func present(_ viewController: UIViewController, presentationStyle: UIModalPresentationStyle? = nil, animated: Bool = true, completion: @escaping () -> Void = {}) -> NavigationTransition {
         NavigationTransition(
-            nextViewController: viewController,
             animated: animated,
-            navigationType: .modal(presentationStyle: presentationStyle ?? viewController.modalPresentationStyle,
-                                   completion: completion)
+            navigationType: .modal(
+                viewController,
+                presentationStyle: presentationStyle ?? viewController.modalPresentationStyle,
+                completion: completion
+            )
         )
     }
     
@@ -67,11 +66,42 @@ public struct NavigationTransition {
     ///     performing this transition.
     ///     - animated: Indicates if this transition should be animated. Is set
     ///     to `false` by default.
-    public static func setSingleViewController(_ viewController: UIViewController, animated: Bool = false) -> NavigationTransition {
+    @available(*, deprecated, message: "should use `setViewControllers` instead")
+    public static func setSingleViewController(
+        _ viewController: UIViewController,
+        animated: Bool = false
+    ) -> NavigationTransition {
         NavigationTransition(
-            nextViewController: viewController,
             animated: animated,
-            navigationType: .setting
+            navigationType: .set([viewController])
+        )
+    }
+    
+    /// Use this method to create a new transition that resets whole hiearachy
+    /// of view in navigation controller and sets just **one** new view controller.
+    ///
+    /// Not animated by default.
+    ///
+    /// - Parameters:
+    ///     - viewController: A view controller that should be presented when
+    ///     performing this transition.
+    ///     - animated: Indicates if this transition should be animated. Is set
+    ///     to `false` by default.
+    ///     - prependWithPlaceholder: a special flag, which if set to `true` adds `PlaceholderViewController`
+    ///     as a root of new navigation stack, so if only one view controller is set, it has a back button to
+    ///     a translucent placeholder view, which then tells coordinator to stop.
+    public static func setViewControllers(
+        _ viewControllers: [UIViewController],
+        animated: Bool = false,
+        prependWithPlaceholder: Bool = false
+    ) -> NavigationTransition {
+        NavigationTransition(
+            animated: animated,
+            navigationType: .set(
+                prependWithPlaceholder
+                ? [PlaceholderViewController()] + viewControllers
+                : viewControllers
+            )
         )
     }
     
@@ -83,7 +113,7 @@ public struct NavigationTransition {
     ///     A navigation controller that should perform this transition.
     public func perform(on navigationController: UINavigationController) {
         switch navigationType {
-        case .modal(let presentationStyle, let completion):
+        case .modal(let nextViewController, let presentationStyle, let completion):
             nextViewController.modalPresentationStyle = presentationStyle
             navigationController
                 .topmostViewContoller
@@ -92,17 +122,17 @@ public struct NavigationTransition {
                     animated: animated,
                     completion: completion
                 )
-        case .pushing:
+        case .push(let nextViewController):
             gracefully(on: navigationController) {
                 navigationController.pushViewController(
                     nextViewController,
                     animated: animated
                 )
             }
-        case .setting:
+        case .set(let viewControllers):
             gracefully(on: navigationController) {
                 navigationController.setViewControllers(
-                    [nextViewController],
+                    viewControllers,
                     animated: animated
                 )
             }
