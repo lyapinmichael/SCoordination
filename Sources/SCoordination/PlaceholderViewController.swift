@@ -9,10 +9,21 @@ import UIKit
 
 final class PlaceholderViewController: UIViewController {
     
-    init() {
+    init(rootBackButtonParameters: BackButtonParameters = .systemDefault) {
         super.init(nibName: nil, bundle: nil)
         shouldHideNavigationBar = true
         modalPresentationStyle = .overFullScreen
+        if case .custom(let title, let tintColor) = rootBackButtonParameters {
+            self.navigationItem.backBarButtonItem = .init(
+                title: title,
+                style: .plain,
+                target: nil,
+                action: nil
+            )
+            self.navigationItem.backBarButtonItem?.tintColor = tintColor
+            self.navigationItem.backBarButtonItem?.title = title
+            self.navigationItem.backBarButtonItem?.menu = nil
+        }
     }
     
     required init?(coder: NSCoder) {

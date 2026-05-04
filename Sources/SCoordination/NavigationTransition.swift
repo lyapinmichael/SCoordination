@@ -93,13 +93,14 @@ public struct NavigationTransition {
     public static func setViewControllers(
         _ viewControllers: [UIViewController],
         animated: Bool = false,
-        canPopFromRoot: Bool = false
+        canPopFromRoot: Bool = false,
+        rootBackButtonParameters: BackButtonParameters = .systemDefault
     ) -> NavigationTransition {
         NavigationTransition(
             animated: animated,
             navigationType: .set(
                 canPopFromRoot
-                ? [PlaceholderViewController()] + viewControllers
+                ? [PlaceholderViewController(rootBackButtonParameters: rootBackButtonParameters)] + viewControllers
                 : viewControllers
             )
         )

@@ -58,11 +58,12 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     public static func withContainerController(
         sharedDependencyContainer: ModuleDependencyContainer? = nil,
         with preconditionData: [String : Any] = [:],
+        rootBackButtonParameters: BackButtonParameters = .systemDefault,
         onStop: NavigationCompletion = .shouldDismiss(animated: false)
     ) -> Self {
         let coordinator = Self(sharedDependencyContainer: sharedDependencyContainer, with: preconditionData)
         coordinator.onStop = onStop
-        let placeholderViewController = PlaceholderViewController()
+        let placeholderViewController = PlaceholderViewController(rootBackButtonParameters: rootBackButtonParameters)
         coordinator.rootViewController.setViewControllers([placeholderViewController], animated: false)
         coordinator.rootViewController.modalPresentationStyle = .overFullScreen
         return coordinator
