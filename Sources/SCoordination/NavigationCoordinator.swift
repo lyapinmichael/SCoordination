@@ -103,16 +103,23 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
         super.stop()
     }
     
-    /// **NOTE**: Should always call `super.shouldStop` when overriding this method.
-    open func shouldStop() {
+    public final func shouldStop() {
         guard !didCallToStop else {
             let logger = os.Logger()
             logger.warning("Has already called to stop this NavigationCoordinator, will ignore this call: \(String(describing: self))")
             return
         }
         didCallToStop = true
+        willStop()
         stop()
+        didStop()
     }
+    
+    /// A template method for a hook, that will happen right **before** `stop()` gets called
+    open func willStop() {}
+    
+    /// A template method for a hook, that will happen right **after** `stop()` gets called
+    open func didStop() {}
     
 }
 
