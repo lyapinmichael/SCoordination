@@ -52,13 +52,6 @@ final class DemoNavCoordinator: NavigationCoordinator<DemoNavDestination> {
                 animated: false) {
                     subcoordinator.navigateTo(.subcoordinating)
                 }
-//            let subcoordinator = DetachedCoordinator(
-//                over: self.rootViewController,
-//                with: ["shouldConfigureNavBar": true]
-//            )
-//            return subcoordinator.prepareNavigationTransition(
-//                for: .subcoordinating
-//            )
         }
     }
     

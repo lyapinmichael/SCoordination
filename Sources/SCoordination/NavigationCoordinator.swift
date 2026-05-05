@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os
 
 open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator, @MainActor ExtendedNavigationHandling {
     
@@ -19,6 +20,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     
     private var onStop: NavigationCompletion = .shouldClearViewHeirarchy
     private let navigationDelegate: UINavigationControllerDelegate
+    private var didCallToStop: Bool = false
     
     // MARK: Init
     
@@ -103,6 +105,12 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     
     /// **NOTE**: Should always call `super.shouldStop` when overriding this method.
     open func shouldStop() {
+        guard !didCallToStop else {
+            let logger = os.Logger()
+            logger.warning("Has already called to stop this NavigationCoordinator, will ignore this call: \(String(describing: self))")
+            return
+        }
+        didCallToStop = true
         stop()
     }
     
