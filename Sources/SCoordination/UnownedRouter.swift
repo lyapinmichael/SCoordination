@@ -45,7 +45,7 @@ extension Unowned: Routing where Value: Routing {
         wrappedValue.dismissAll(animated: animated, completion: completion)
     }
     
-    public func prepareNavigationTransition(for destination: Value.DestinationType) -> NavigationTransition {
+    public func prepareNavigationTransition(for destination: Value.DestinationType) -> NavigationTransition? {
         wrappedValue.prepareNavigationTransition(for: destination)
     }
     

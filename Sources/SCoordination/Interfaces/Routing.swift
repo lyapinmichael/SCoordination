@@ -35,7 +35,7 @@ public protocol Routing: ViewControlling, DetachedTransitionHandling {
     ///
     /// - Warning:
     ///     This method should be implemented in `NavigationContoller` subclasses.
-    func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition
+    func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition?
     
     func shouldStop()
 }
@@ -43,7 +43,7 @@ public protocol Routing: ViewControlling, DetachedTransitionHandling {
 extension Routing where RootViewController == UINavigationController {
     public func navigateTo(_ destination: DestinationType) {
         let transition = prepareNavigationTransition(for: destination)
-        transition.perform(on: rootViewController)
+        transition?.perform(on: rootViewController)
     }
     
     public func popToRoot(animated: Bool) {

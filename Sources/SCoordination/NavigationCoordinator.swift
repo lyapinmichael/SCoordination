@@ -78,7 +78,7 @@ open class NavigationCoordinator<DestinationType: Destination>: BaseCoordinator,
     }
     
     @MainActor
-    open func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition {
+    open func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition? {
         fatalError("Please implement \(#function) method for setting up navigation from NavigationCoordinator.")
     }
     

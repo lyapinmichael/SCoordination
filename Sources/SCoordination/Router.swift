@@ -16,7 +16,7 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
     
     // MARK: Private properties
 
-    private var _prepareNavigationTransition: (DestinationType) -> NavigationTransition
+    private var _prepareNavigationTransition: (DestinationType) -> NavigationTransition?
     private var _navigateTo: (DestinationType) -> Void
     private var _shouldStop: () -> Void
     private var _popToRoot: (Bool) -> Void
@@ -61,7 +61,7 @@ public final class Router<DestinationType: Destination, RootViewController: UINa
         _dismissAll(animated, completion)
     }
     
-    public func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition {
+    public func prepareNavigationTransition(for destination: DestinationType) -> NavigationTransition? {
         _prepareNavigationTransition(destination)
     }
     
